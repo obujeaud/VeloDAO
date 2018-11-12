@@ -7,76 +7,85 @@ import persistance.dao.EquipeDAO;
 import persistance.pere.TU_Pere;
 
 public class TestEquipeDAO extends TU_Pere {
-	EquipeDAO edao = new EquipeDAO();
-	Equipe s = new Equipe(10, "Ant", 15000);
+	
+	EquipeDAO equipeDao = new EquipeDAO();
+	Equipe equipe = new Equipe(10, "Ant", 15000,"Cyan");
 	CyclisteDAO cdao = new CyclisteDAO();
-	Cycliste c = new Cycliste();
+	Cycliste cycliste = new Cycliste();
 	String selectList = "select count(id) from equipe";
 	String updateName = "Poiscaille";
+	String updateColor = "Cyan";
 
 	public void testFindById() throws Exception {
 		// Normal
-		s = edao.findById(2);
-		assertEquals(edao.findById(2).getName(), s.getName());
+		equipe = equipeDao.findById(2);
+		assertEquals(equipeDao.findById(2).getName(), equipe.getName());
+		assertEquals(equipeDao.findById(2).getCouleur(), equipe.getCouleur());
 
 		// Id = 0
-		assertNull(edao.findById(0));
+		assertNull(equipeDao.findById(0));
 
 		// Id > list size
-		assertNull(edao.findById(150));
+		assertNull(equipeDao.findById(150));
 	}
 
 	public void testCreate() throws Exception {
 		// Normal
-		edao.create(s);
-		assert (edao.findById(edao.findList().size())) != null;
-		assertEquals(s.getName(), edao.findById(edao.findList().size()).getName());
+		equipeDao.create(equipe);
+		assert (equipeDao.findById(equipeDao.findList().size())) != null;
+		String equipeNameFromDB = equipeDao.findById(equipeDao.findList().size()).getName();
+		String equipeColorFromDB = equipeDao.findById(equipeDao.findList().size()).getCouleur();
+		
+		assertEquals(equipe.getName(), equipeNameFromDB);
+		assertEquals(equipe.getCouleur(), equipeColorFromDB);
 
 		// Object null
-		assertNull(edao.create(null));
+		assertNull(equipeDao.create(null));
 		
-		s.setId(2);
-		assertNull(edao.create(s));
+		equipe.setId(2);
+		assertNull(equipeDao.create(equipe));
 	}
 
 	public void testFindList() throws Exception {
 		int realNb = getInserter().select(selectList).getDataAsInt();
-		assertEquals(edao.findList().size(), realNb);
+		assertEquals(equipeDao.findList().size(), realNb);
 	}
 
 	public void testUpdateById() throws Exception {
 		// Normal
-		s = edao.findById(2);
-		s.setName(updateName);
-		edao.updateById(s);
-		assertEquals(s.getName(), edao.findById(2).getName());
+		equipe = equipeDao.findById(2);
+		equipe.setName(updateName);
+		equipe.setCouleur(updateColor);
+		equipeDao.updateById(equipe);
+		assertEquals(equipe.getName(), equipeDao.findById(2).getName());
+		assertEquals(equipeDao.findById(2).getCouleur(), equipe.getCouleur());
 
 		// Object null
-		assertNull(edao.updateById(null));
+		assertNull(equipeDao.updateById(null));
 
 		// Id > list size and not present in database
-		s.setId(150);
-		assertNull(edao.updateById(s));
+		equipe.setId(150);
+		assertNull(equipeDao.updateById(equipe));
 
 		// Id not present in database
-		s.setId(0);
-		assertNull(edao.updateById(s));
+		equipe.setId(0);
+		assertNull(equipeDao.updateById(equipe));
 	}
 
 	public void testDeleteById() throws Exception {
 		// Normal
-		edao.deleteById(2);
+		equipeDao.deleteById(2);
 		int realNb = getInserter().select(selectList).getDataAsInt();
-		assertEquals(edao.findList().size(), realNb);
+		assertEquals(equipeDao.findList().size(), realNb);
 
 		// Id > list size
-		edao.deleteById(15);
+		equipeDao.deleteById(15);
 		realNb = getInserter().select(selectList).getDataAsInt();
-		assertEquals(edao.findList().size(), realNb);
+		assertEquals(equipeDao.findList().size(), realNb);
 
 		// Id not present in database
-		edao.deleteById(0);
+		equipeDao.deleteById(0);
 		realNb = getInserter().select(selectList).getDataAsInt();
-		assertEquals(edao.findList().size(), realNb);
+		assertEquals(equipeDao.findList().size(), realNb);
 	}
 }
