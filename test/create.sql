@@ -51,10 +51,10 @@ CREATE TABLE IF NOT EXISTS `equipe` (
 
 -- Export de donn�es de la table basevelo_test.equipe : ~0 rows (environ)
 /*!40000 ALTER TABLE `equipe` DISABLE KEYS */;
-INSERT INTO `equipe` (`id`, `name`, `budget`) VALUES
-	(1, 'Equipe Total', 500000),
-	(2, 'Equipe Carrefour', 600000),
-	(3, 'Equipe Axa', 700);
+INSERT INTO `equipe` (`id`, `name`, `budget`, `couleur`) VALUES
+	(1, 'Equipe Total', 500000, 'Bleu'),
+	(2, 'Equipe Carrefour', 600000, 'Vert'),
+	(3, 'Equipe Axa', 700, 'Rouge');
 /*!40000 ALTER TABLE `equipe` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
